@@ -18,12 +18,19 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_ERROR_FLAGS} ${CMAKE_C_NO_ERROR_FL
 
 set(SOURCE_FILES
         src/main/core/main.cpp
-        src/main/core/main.h src/main/core/ScratchRenderer.cpp src/main/core/ScratchRenderer.h)
+        src/main/core/main.h
+        src/main/core/ScratchRenderer.cpp
+        src/main/core/ScratchRenderer.h
+        )
 
 set(TEST_FILES
         src/test/test.cpp
         src/test/test.h
-        src/test/Test.cpp src/test/Test.h src/test/Tests.cpp src/test/Tests.h)
+        src/test/Test.cpp
+        src/test/Test.h
+        src/test/Tests.cpp
+        src/test/Tests.h
+        )
 
 add_library(ScratchWasmRenderer STATIC ${SOURCE_FILES})
 
