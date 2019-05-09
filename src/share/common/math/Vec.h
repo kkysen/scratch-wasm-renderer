@@ -75,8 +75,15 @@ namespace math {
         }
         
         template <class F>
-        _constexpr void forEachIndexed(F f) const noexcept {
-            return a.forEachIndexed(f);
+        _constexpr const Vec& forEach(F f) const noexcept {
+            a.forEach(f);
+            return *this;
+        }
+        
+        template <class F>
+        _constexpr const Vec& forEachIndexed(F f) const noexcept {
+            a.forEachIndexed(f);
+            return *this;
         }
         
         template <class F>
@@ -119,6 +126,15 @@ namespace math {
         template <typename R = T, class F>
         _constexpr R fold(F f) const noexcept {
             return a.fold(f);
+        }
+        
+        template <size_t N2>
+        _constexpr Vec& subAssign(const Vec<N2, T>& truncated) noexcept {
+            static_assert(N2 <= N);
+            truncated.forEachIndexed([&a = this->a](const T& t, auto i) {
+                a[i] = t;
+            });
+            return *this;
         }
         
         _constexpr Vec& operator+=(const Vec& v) noexcept {
@@ -208,15 +224,9 @@ namespace math {
         static _constexpr Vec same(const T& t) noexcept {
             return Vec(A::template same<N>(t));
         }
-    
-    private:
         
-        static const Vec _zero;
-    
-    public:
-        
-        static _constexpr const Vec& zero() noexcept {
-            return _zero;
+        static _constexpr Vec zero() noexcept {
+            return same(T());
         }
         
         template <size_t M>
@@ -230,9 +240,6 @@ namespace math {
         }
         
     };
-    
-    template <size_t N, typename T>
-    const Vec<N, T> Vec<N, T>::_zero = same(0);
     
     template <size_t N, typename T>
     _constexpr bool operator==(const Vec<N, T>& a, const Vec<N, T>& b) noexcept {

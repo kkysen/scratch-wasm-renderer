@@ -6,7 +6,7 @@
 
 #include "Drawable.h"
 
-namespace render {
+namespace scratch::render {
     
     Rect Skin::getFenceBounds(Drawable& drawable) noexcept {
         return drawable.getFastBounds();

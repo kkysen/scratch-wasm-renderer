@@ -6,7 +6,7 @@
 
 #include "src/main/render/utils.h"
 
-namespace render {
+namespace scratch::render {
     
     template <class Impl>
     class IsTouching {

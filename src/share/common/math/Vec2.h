@@ -47,21 +47,12 @@ namespace math {
             static constexpr auto y = Base::getter::template index<1>();
             
         };
-    
-    private:
         
-        static const Vec2 _zero;
-    
-    public:
-        
-        static _constexpr const Vec2& zero() noexcept {
-            return _zero;
+        static _constexpr Vec2 zero() noexcept {
+            return Base::zero();
         }
         
     };
-    
-    template <typename T>
-    const Vec2<T> Vec2<T>::_zero = Base::zero();
     
     template <typename T>
     _constexpr T cross(const Vec<2, T>& a, const Vec<2, T>& b) noexcept {

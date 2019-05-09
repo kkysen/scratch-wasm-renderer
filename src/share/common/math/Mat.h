@@ -119,13 +119,13 @@ namespace math {
         }
         
         template <size_t M2, size_t N2>
-        _constexpr Mat& operator=(const Mat<M2, N2, T>& truncated) noexcept {
+        _constexpr Mat& subAssign(const Mat<M2, N2, T>& truncated) noexcept {
             static_assert(M2 <= M);
             static_assert(N2 <= N);
-            const auto& self = *this;
-            truncated.mapIndexed([self](const T& t, auto i, auto j) {
-                self[i][j] = t;
+            truncated.matrix.forEachIndexed([&a = matrix](const Vec<N2, T>& row, auto i) {
+                a[i].subAssign(row);
             });
+            return *this;
         }
         
         template <size_t M2>
@@ -141,41 +141,20 @@ namespace math {
         static _constexpr Mat same(const T& t) noexcept {
             return mapIndex([t](auto, auto) { return t; });
         }
-    
-    private:
         
-        static const Mat _zero;
-        static const Mat _one;
-        
-        static _constexpr Mat makeZero() noexcept {
-            return same(0);
+        static _constexpr Mat zero() noexcept {
+            return same(T());
         }
         
-        static _constexpr Mat makeOne() noexcept {
+        static _constexpr Mat one() noexcept {
             return mapIndex([](auto i, auto j) -> T { return i == j ? 1 : 0; });
         }
-    
-    public:
         
-        static _constexpr const Mat& zero() noexcept {
-            return _zero;
-        }
-        
-        static _constexpr const Mat& one() noexcept {
-            return _one;
-        }
-        
-        static _constexpr const Mat& identity() noexcept {
+        static _constexpr Mat identity() noexcept {
             return one();
         }
         
     };
-    
-    template <size_t M, size_t N, typename T>
-    const Mat<M, N, T> Mat<M, N, T>::_zero = makeZero();
-    
-    template <size_t M, size_t N, typename T>
-    const Mat<M, N, T> Mat<M, N, T>::_one = makeOne();
     
     template <size_t M, size_t N, size_t P, size_t Q, typename T>
     _constexpr Vec<P, T> operator*(const Mat<M, N, T>& a, const Vec<Q, T>& x) noexcept {

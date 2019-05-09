@@ -17,7 +17,7 @@
 #include <vector>
 #include <functional>
 
-namespace render {
+namespace scratch::render {
     
     class Drawable {
     
@@ -29,11 +29,11 @@ namespace render {
         
         using Effect = shader::effects::Effect;
         using Effects = shader::effects::Effects;
-    
+        
         static constexpr Color colorFromId(Id id) {
             return Color::encodeId(id);
         }
-    
+        
         // TODO is this ever used?
         static Id idFromColor(const Color& color) {
             return color.decodeId();
@@ -78,6 +78,9 @@ namespace render {
         explicit constexpr Drawable(Id id) noexcept : id(id), _uniforms(id) {}
         
         const Skin& skin() const noexcept {
+            #ifndef NDEBUG
+            assert(!!_skin);
+            #endif
             return *_skin;
         }
         
@@ -169,9 +172,8 @@ namespace render {
             if (!(rotationCenterDirty && _skin)) {
                 return;
             }
-            const auto center = skin().rotationCenter();
-            const auto skinSize = skin().size();
-            rotationAdjusted = (center - (skinSize * 0.5f)) * _scale / NORMAL_SCALE;
+            const auto& skin_ = skin();
+            rotationAdjusted = (skin_.rotationCenter() - (skin_.size() * 0.5f)) * _scale / NORMAL_SCALE;
             rotationAdjusted.y() *= -1;
             rotationCenterDirty = false;
         }
@@ -186,17 +188,9 @@ namespace render {
         
         void calculateModelMatrix() noexcept {
             auto& modelMatrix = _uniforms.modelMatrix;
-            const auto rotation = rotationMatrix.truncate<2, 2>();
-            const auto a = rotation * skinScale;
-            const auto e = math::dot(rotation.matrix, rotationAdjusted) + position;
-            const auto rotationX = rotationMatrix.vec2(0);
-            const auto rotationY = rotationMatrix.vec2(2);
-            const auto& scale = _scale;
-            const auto& adjusted = rotationAdjusted;
-            modelMatrix.setVec2(0) = scale.x() * rotationX;
-            modelMatrix.setVec2(2) = scale.y() * rotationY;
-            // TODO make this matrix multiplication?
-            modelMatrix.setVec2(6) = (rotationX * adjusted.x()) + (rotationY * adjusted.y()) + position;
+            const auto rotation = rotationMatrix.truncate<2, 2>().matrix;
+            modelMatrix.subAssign(math::Mat(skinScale * rotation));
+            modelMatrix.setVec2(6) = math::dot(rotation, rotationAdjusted) + position;
         }
         
         void calculateTransform() noexcept {
@@ -354,5 +348,7 @@ namespace render {
         }
         
     };
+    
+    std::vector<Vec2> Drawable::_transformedHullPoints = {};
     
 }

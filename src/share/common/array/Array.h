@@ -20,6 +20,11 @@ namespace {
         return {{f(Indices)...}};
     }
     
+    template <class F, size_t...Indices>
+    _constexpr void forEachIndex(F f, std::index_sequence<Indices...>) noexcept {
+        (f(Indices), ...);
+    }
+    
 }
 
 namespace array {
@@ -73,10 +78,17 @@ namespace array {
     
     private:
         
+        static constexpr auto indices = std::make_index_sequence<N>();
+        
         template <class F>
         static _constexpr auto mapIndex(F f) noexcept {
             using U = decltype(f(0UL));
-            return Array<U, N>(::mapIndex<N, F>(f, std::make_index_sequence<N>()));
+            return Array<U, N>(::mapIndex<N, F>(f, indices));
+        }
+        
+        template <class F>
+        static _constexpr void forEachIndex(F f) noexcept {
+            ::forEachIndex(f, indices);
         }
     
     public:
@@ -96,6 +108,7 @@ namespace array {
         
         
         #define _map mapIndex([f, &a = this->a](auto i)
+        #define _forEach forEachIndex([f, &a = this->a](auto i)
         
         template <class F>
         _constexpr auto map(F f) const noexcept {
@@ -117,30 +130,31 @@ namespace array {
         
         
         template <class F>
-        _constexpr Array& forEach(F f) const noexcept {
-            _map { f(a[i]); });
+        _constexpr const Array& forEach(F f) const noexcept {
+            _forEach { f(a[i]); });
             return *this;
         }
         
         template <class F>
-        _constexpr Array& forEachIndexed(F f) const noexcept {
-            _map { f(a[i], i); });
+        _constexpr const Array& forEachIndexed(F f) const noexcept {
+            _forEach { f(a[i], i); });
             return *this;
         }
         
         template <class F>
         _constexpr Array& mutForEach(F f) noexcept {
-            _map { f(a[i]); });
+            _forEach { f(a[i]); });
             return *this;
         }
         
         template <class F>
         _constexpr Array& mutForEachIndexed(F f) noexcept {
-            _map { f(a[i], i); });
+            _forEach { f(a[i], i); });
             return *this;
         }
         
         #undef _map
+        #undef _forEach
     
     
     

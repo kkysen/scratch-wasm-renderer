@@ -59,7 +59,7 @@ namespace {
     }
     
     constexpr Color3 hslToRgb01(const Color3& hsl) noexcept {
-        const auto[h, s, l] = hsl.array;
+        const auto[h, s, l] = hsl;
         if (s == 0) {
             return Color3::same(l);
         }
@@ -79,7 +79,7 @@ namespace {
     
 }
 
-namespace render::effectTransform {
+namespace scratch::render::effectTransform {
     
     Silhouette::Color color(const Drawable& drawable, Silhouette::Color color, u32 effectMask) noexcept {
         if (color[3] == 0) {
@@ -100,7 +100,7 @@ namespace render::effectTransform {
             return color;
         }
         
-        auto[h, s, l] = rgbToHsl(color.truncate<3>().cast<f32>()).array;
+        auto[h, s, l] = rgbToHsl(color.truncate<3>().cast<f32>());
         
         if (enableColor) {
             // this code forces grayscale values to be slightly saturated

@@ -7,7 +7,7 @@
 #include "src/main/render/utils.h"
 #include "Silhouette.h"
 
-namespace render::effectTransform {
+namespace scratch::render::effectTransform {
 
     Silhouette::Color color(const Drawable& drawable, Silhouette::Color color, u32 effectMask = 0xffffffff) noexcept;
     

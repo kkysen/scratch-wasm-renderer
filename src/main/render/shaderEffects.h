@@ -11,7 +11,9 @@
 #include <string>
 #include <functional>
 
-namespace render::shader::effects {
+namespace scratch::render::shader::effects {
+    
+    using array::Array;
     
     using Converter = f32(*)(f32);
     
@@ -30,9 +32,14 @@ namespace render::shader::effects {
         
         constexpr EffectType(u32 id, bool shapeChanges, Converter convert) noexcept
                 : id(id), shapeChanges(shapeChanges), convert(convert) {}
-
-//        EffectType(const EffectType& other) = delete;
-// TODO make deleted
+    
+    private:
+        
+        friend struct std::array<EffectType, 7>;
+        
+        EffectType(const EffectType& other) = default;
+    
+    public:
         
         constexpr u32 mask() const noexcept {
             return 1u << id;
@@ -48,6 +55,12 @@ namespace render::shader::effects {
         return (value & effect.mask()) != 0;
     }
     
+}
+
+namespace {
+    
+    using namespace scratch::render::shader::effects;
+    
     using math::modulus;
     using math::max;
     using math::min;
@@ -56,9 +69,7 @@ namespace render::shader::effects {
     using math::PI;
     using std::round;
     
-    using array::Array;
-    
-    static constexpr std::array<EffectType, 7> _all = {
+    static constexpr std::array<EffectType, 7> all = {
             EffectType {0, false, [](f32 x) -> f32 {
                 return modulus(x / 200, 1.f);
             }},
@@ -82,16 +93,20 @@ namespace render::shader::effects {
             }},
     };
     
-    constexpr const EffectType& color = _all[0];
-    constexpr const EffectType& fisheye = _all[1];
-    constexpr const EffectType& whirl = _all[2];
-    constexpr const EffectType& pixelate = _all[3];
-    constexpr const EffectType& mosaic = _all[4];
-    constexpr const EffectType& brightness = _all[5];
-    constexpr const EffectType& ghost = _all[6];
+}
+
+namespace scratch::render::shader::effects {
+    
+    constexpr const EffectType& color = ::all[0];
+    constexpr const EffectType& fisheye = ::all[1];
+    constexpr const EffectType& whirl = ::all[2];
+    constexpr const EffectType& pixelate = ::all[3];
+    constexpr const EffectType& mosaic = ::all[4];
+    constexpr const EffectType& brightness = ::all[5];
+    constexpr const EffectType& ghost = ::all[6];
     
     constexpr Array<EffectType, 7> all() noexcept {
-        return _all;
+        return ::all;
     }
     
     class Effect {

@@ -8,7 +8,7 @@
 #include "src/main/render/utils.h"
 #include "src/main/render/Color.h"
 
-namespace render {
+namespace scratch::render {
     
     class Silhouette {
     
@@ -16,7 +16,7 @@ namespace render {
         
         using Rect = math::Rect<u32>;
         using Vec2 = math::Vec2<u32>;
-        using Color = math::Vec<4, u8>; //std::array<u8, 4>;
+        using Color = math::Vec<4, u8>;
     
     private:
         
@@ -53,7 +53,7 @@ namespace render {
     
     public:
         
-        static constexpr const Color& noColor() noexcept {
+        static constexpr Color noColor() noexcept {
             return Color::zero();
         }
     
@@ -87,12 +87,6 @@ namespace render {
             return xy.mapIndexed([d, k](const Color& color, auto i, auto j) -> f32 {
                 return color[k] * d[i][0] * d[j][1];
             }).fold(std::plus());
-//            using R2 = array::range<2>;
-//            return R2::make().map([xy, d, k](auto i) {
-//                return R2::make().map([xy, d, k, i](auto j) {
-//                    return xy[i][j][k] * d[i][0] * d[j][1];
-//                }).fold(std::plus());
-//            }).fold(std::plus());
         }
     
     public:
@@ -101,16 +95,16 @@ namespace render {
             if (!colorData) {
                 return noColor();
             }
+            using namespace math;
             const auto p2 = p * sizeMinusOne;
             const auto d1 = p2 % 1.f;
-            const auto d0 = render::Vec2::same(1) - d1;
+            const auto d0 = Vec<2, f32>::same(1) - d1;
             const auto xFloor = d0.cast<u32>();
             const auto xy = Rect(xFloor, xFloor + Vec2::same(1))
                     .corners()
                     .matrix
                     .map([this](auto&& p) { return getColor(p); });
-            // TODO fix this template abomination
-            const math::Mat<2, 2, f32> d = math::vec<2>::of<std::remove_const_t<decltype(d0)>>({d0, d1});
+            const Mat<2, 2, f32> d = Vec<2, Vec<2, f32>>({d0, d1});
             return array::range<4>()
                     .map([&xy, &d](auto k) -> u8 { return linearFunc(xy, d, k); })
                     .map(math::clampedCast<f32, u8>)

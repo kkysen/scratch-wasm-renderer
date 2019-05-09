@@ -9,7 +9,7 @@
 #include <src/main/render/Id.h>
 #include <src/share/common/math/Vec.h>
 
-namespace render {
+namespace scratch::render {
     
     class Color {
     

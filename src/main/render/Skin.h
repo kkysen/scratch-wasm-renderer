@@ -10,7 +10,7 @@
 
 #include <memory>
 
-namespace render {
+namespace scratch::render {
     
     class Skin {
     
@@ -23,6 +23,8 @@ namespace render {
             mutable std::unique_ptr<JS> skin; // WebGLTexture
         } _uniforms;
         Silhouette silhouette;
+        
+        static constexpr Vec2 zero = Vec2::zero();
     
     public:
         
@@ -35,7 +37,7 @@ namespace render {
         }
         
         virtual const Vec2& size() const noexcept {
-            return Vec2::zero();
+            return zero;
         }
         
         void setRotationCenter(const Vec2& rotationCenter) noexcept {

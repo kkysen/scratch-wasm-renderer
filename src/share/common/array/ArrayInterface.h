@@ -42,8 +42,7 @@ namespace array {
         // This won't matter for literal types.
         static_assert(std::is_literal_type_v<T>);
     
-    public: // TODO make protected
-//    protected:
+    protected:
         
         Base a;
         

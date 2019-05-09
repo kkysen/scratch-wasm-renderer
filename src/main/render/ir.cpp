@@ -13,6 +13,7 @@ constexpr i64 _random() {
 // Instead, I only want the high inline threshold for array::Array, array::ArrayInterface, and inheriting classes like Vec.
 // Although it does appear Vec<4> and Mat<4, 4> are still inlined, which are the important ones.
 // I don't use higher dimensions in my code.
+// "[^:\.]array" shouldn't appear in the IR if everything is correctly inlined.
 
 extern "C"
 int f1() {

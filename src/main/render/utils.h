@@ -13,7 +13,7 @@
 
 #include "src/share/lib/corrade/CorradeArrayView.h"
 
-namespace render {
+namespace scratch::render {
     
     using Float = f32;
     

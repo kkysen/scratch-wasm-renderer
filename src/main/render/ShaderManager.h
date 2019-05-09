@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace render {
+namespace scratch::render {
     
     class ShaderManager {
 
