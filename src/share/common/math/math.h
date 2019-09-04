@@ -13,6 +13,9 @@
 namespace math {
     
     template <typename T>
+    using Extreme = const T& (*)(const T&, const T&);
+    
+    template <typename T>
     constexpr const T& min(const T& a, const T& b) noexcept {
         return a < b ? a : b;
     }

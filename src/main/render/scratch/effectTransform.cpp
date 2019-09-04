@@ -8,7 +8,7 @@
 
 namespace {
     
-    using render::Vec2;
+    using render::scratch::Vec2;
     
     using Color3 = math::Vec<3, f32>;
     
@@ -79,7 +79,7 @@ namespace {
     
 }
 
-namespace scratch::render::effectTransform {
+namespace render::scratch::effectTransform {
     
     Silhouette::Color color(const Drawable& drawable, Silhouette::Color color, u32 effectMask) noexcept {
         if (color[3] == 0) {

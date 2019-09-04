@@ -4,20 +4,21 @@
 
 #pragma once
 
-#include "src/main/render/utils.h"
+#include "types.h"
 #include <src/share/common/numbers.h>
 #include <src/main/render/Color.h>
 #include <src/main/render/Id.h>
-#include "src/main/render/Skin.h"
+#include "Skin.h"
 #include "effectTransform.h"
 #include "shaderEffects.h"
+#include "color.h"
 #include <src/share/common/math/math.h>
 #include <src/share/stde/by.h>
 #include <memory>
 #include <vector>
 #include <functional>
 
-namespace scratch::render {
+namespace render::scratch {
     
     class Drawable {
     
@@ -31,12 +32,12 @@ namespace scratch::render {
         using Effects = shader::effects::Effects;
         
         static constexpr Color colorFromId(Id id) {
-            return Color::encodeId(id);
+            return color::encodeId(id);
         }
         
         // TODO is this ever used?
         static Id idFromColor(const Color& color) {
-            return color.decodeId();
+            return color::decodeId(color);
         }
         
         struct Uniforms {
@@ -247,7 +248,8 @@ namespace scratch::render {
         static std::vector<Vec2> _transformedHullPoints; // buffer
         
         std::vector<Vec2>& getTransformedHullPoints() noexcept {
-            const auto projection = Mat4::ortho(array::range<3>().filled(Vec2(-1, 1)));
+            constexpr auto cube = math::Mat(math::Vec2(Vec3::same(-1), Vec3::same(1)));
+            constexpr auto projection = Mat4::ortho(cube);
             const auto skinSize = skin().size();
             const Vec2 halfPixel = 1.0f / skinSize * 0.5f;
             const auto adjustedHalfPixel = Vec2(-halfPixel.x() + 0.5, halfPixel.y() - 0.5);
@@ -341,7 +343,7 @@ namespace scratch::render {
         Silhouette::Color sampleColor(Vec2 v) const noexcept {
             const auto localPosition = getLocalPosition(v);
             if (!Rect(Vec2::same(0), Vec2::same(0)).contains(localPosition)) {
-                return Silhouette::noColor(); // TODO is this right?
+                return Silhouette::noColor; // TODO is this right?
             }
             const auto textColor = skin().colorAtNearest(localPosition);
             return effectTransform::color(*this, textColor);

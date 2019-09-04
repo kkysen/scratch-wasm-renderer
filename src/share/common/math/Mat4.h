@@ -8,6 +8,7 @@
 #include <src/share/common/numbers.h>
 #include <src/share/common/Setter.h>
 #include "Vec2.h"
+#include "Vec3.h"
 #include "Mat.h"
 
 namespace math {
@@ -102,15 +103,15 @@ namespace math {
             return inv;
         }
         
-        static _constexpr Mat4 ortho(const array::Array<Vec2<T>, 3>& cube) noexcept {
-            const auto cubeVec = Vec(cube);
-            return Mat<3, 4, T>::mapIndex([&cubeVec](auto i, auto j) -> f32 {
+        static _constexpr Mat4 ortho(const Mat<2, 3, T>& cube) noexcept {
+            const Mat<3, 2, T> sides = cube.transpose();
+            return Mat<3, 4, T>::mapIndex([&sides](auto i, auto j) -> f32 {
                 if (i != j) {
                     return 0;
                 }
-                const auto& x = cubeVec[i];
+                const auto& x = sides[i];
                 return 2 / (x[1] - x[0]);
-            }).template extendRows<4>(cubeVec.map([](const auto& x) {
+            }).template extendRows<4>(sides.matrix.map([](const auto& x) {
                 return (x[0] + x[1]) / (x[0] - x[1]);
             }).template extend<4>(1));
         }

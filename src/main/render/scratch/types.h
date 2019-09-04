@@ -4,16 +4,14 @@
 
 #pragma once
 
+#include "src/main/render/types.h"
+
 #include "src/share/common/math/Vec2.h"
 #include "src/share/common/math/Vec3.h"
 #include "src/share/common/math/Mat4.h"
 #include "src/share/common/math/Rect.h"
 
-#define CORRADE_ARRAYVIEW_STL_COMPATIBILITY 1
-
-#include "src/share/lib/corrade/CorradeArrayView.h"
-
-namespace scratch::render {
+namespace render::scratch {
     
     using Float = f32;
     
@@ -22,11 +20,9 @@ namespace scratch::render {
     using Mat4 = math::Mat4<Float>;
     using Rect = math::Rect<Float>;
     
-    using Corrade::Containers::ArrayView;
-    using Corrade::Containers::StaticArrayView;
-    
     class JS {};
     
     class Drawable;
+    class Renderer;
     
 }

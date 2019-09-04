@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "src/main/render/utils.h"
+#include "types.h"
 
-namespace scratch::render {
+namespace render::scratch {
     
     template <class Impl>
     class IsTouching {

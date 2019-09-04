@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "src/main/render/utils.h"
+#include "types.h"
 #include "Silhouette.h"
 
-namespace scratch::render::effectTransform {
+namespace render::scratch::effectTransform {
 
     Silhouette::Color color(const Drawable& drawable, Silhouette::Color color, u32 effectMask = 0xffffffff) noexcept;
     

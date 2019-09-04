@@ -5,10 +5,11 @@
 #pragma once
 
 #include <src/share/common/array/Array.h>
-#include "src/main/render/utils.h"
+#include "types.h"
 #include "src/main/render/Color.h"
+#include "src/main/render/ImageData.h"
 
-namespace scratch::render {
+namespace render::scratch {
     
     class Silhouette {
     
@@ -16,68 +17,45 @@ namespace scratch::render {
         
         using Rect = math::Rect<u32>;
         using Vec2 = math::Vec2<u32>;
-        using Color = math::Vec<4, u8>;
+        using Color = Pixel;
     
     private:
         
-        Rect rect;
-        render::Vec2 sizeMinusOne;
-        ArrayView<u8> colorData; // Uint8ClampedArray
+        ImageData colorData;
+        scratch::Vec2 sizeMinusOne; // will be negative if !colorData, so need to be careful
     
     public:
         
-        constexpr Silhouette(const Vec2& size, ArrayView<u8> colorData) noexcept
-                : rect(Vec2::zero(), size),
-                  sizeMinusOne(Vec2(size - Vec2::same(1)).cast<f32>()),
-                  colorData(colorData) {}
+        explicit constexpr Silhouette(ImageData colorData) noexcept
+                : colorData(colorData),
+                  sizeMinusOne(Vec2(colorData.size() - Vec2::same(1)).cast<f32>()) {}
         
-        constexpr Silhouette() noexcept : Silhouette(Vec2::zero(), nullptr) {}
+        constexpr Silhouette() noexcept : Silhouette(ImageData(nullptr)) {}
+        
+        static constexpr Color noColor = Color::zero();
     
     private:
         
         constexpr const Vec2& size() const noexcept {
-            return rect.topRight;
+            return colorData.size();
         }
         
-        constexpr u32 index(const Vec2& p) const noexcept {
-            return (p.y() * size().x()) + p.x();
+        constexpr u8 getPoint(const Vec2& p) const noexcept {
+            return !colorData.contains(p) ? 0 : colorData[p][3];
         }
         
-        constexpr u8 getPoint(const Vec2& point) const noexcept {
-            // TODO check if <= vs. < matters
-            if (!rect.contains(point)) {
-                return 0;
-            }
-            return colorData[(index(point) * 4) + 3];
-        }
-    
-    public:
-        
-        static constexpr Color noColor() noexcept {
-            return Color::zero();
-        }
-    
-    private:
-        
-        constexpr Color getColor(const Vec2& point) const noexcept {
-            if (!rect.contains(point)) {
-                return noColor();
-            }
-            const auto offset = index(point) * 4;
-            return Color(colorData.slice<4>(offset));
+        constexpr const Color& getColor(const Vec2& p) const noexcept {
+            return !colorData.contains(p) ? noColor : colorData[p];
         }
         
-        constexpr Vec2 flooredTimesSizeMinusOne(const render::Vec2& p) const noexcept {
+        constexpr Vec2 flooredTimesSizeMinusOne(const scratch::Vec2& p) const noexcept {
             return (p * sizeMinusOne).cast<u32>();
         }
     
     public:
         
-        constexpr Color colorAtNearest(const render::Vec2& p) const noexcept {
-            if (!colorData) {
-                return noColor();
-            }
-            return getColor(flooredTimesSizeMinusOne(p));
+        constexpr const Color& colorAtNearest(const scratch::Vec2& p) const noexcept {
+            return !colorData ? noColor : getColor(flooredTimesSizeMinusOne(p));
         }
     
     private:
@@ -91,9 +69,9 @@ namespace scratch::render {
     
     public:
         
-        constexpr Color colorAtLinear(const render::Vec2& p) const noexcept {
+        constexpr Color colorAtLinear(const scratch::Vec2& p) const noexcept {
             if (!colorData) {
-                return noColor();
+                return noColor;
             }
             using namespace math;
             const auto p2 = p * sizeMinusOne;
@@ -111,11 +89,11 @@ namespace scratch::render {
                     .wrap([](auto&& x) { return Color(x); });
         }
         
-        constexpr bool isTouchingNearest(const render::Vec2& p) const noexcept {
+        constexpr bool isTouchingNearest(const scratch::Vec2& p) const noexcept {
             return !colorData ? false : getPoint(flooredTimesSizeMinusOne(p));
         }
         
-        constexpr bool isTouchingLinear(const render::Vec2& p) const noexcept {
+        constexpr bool isTouchingLinear(const scratch::Vec2& p) const noexcept {
             const auto x = flooredTimesSizeMinusOne(p);
             return Rect(x, x + Vec2::same(1))
                     .corners()

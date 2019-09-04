@@ -153,6 +153,18 @@ namespace math {
         static _constexpr Mat identity() noexcept {
             return one();
         }
+    
+        _constexpr size_t hash() const noexcept {
+            return matrix.hash();
+        }
+    
+        struct Hash {
+        
+            _constexpr size_t operator()(const Mat& mat) const noexcept {
+                return mat.hash();
+            }
+        
+        };
         
     };
     

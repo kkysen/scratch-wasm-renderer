@@ -239,6 +239,18 @@ namespace math {
             return Vec<M, T>(a.template truncate<M>());
         }
         
+        _constexpr size_t hash() const noexcept {
+            return a.hash();
+        }
+    
+        struct Hash {
+        
+            _constexpr size_t operator()(const Vec& vec) const noexcept {
+                return vec.hash();
+            }
+        
+        };
+        
     };
     
     template <size_t N, typename T>
@@ -368,21 +380,16 @@ namespace math {
 //    _constexpr Vec<N, T> clamp(const Vec<N, T>& value, const Vec<N, T>& min, const Vec<N, T>& max) noexcept {
 //        return value.clamped(min, max);
 //    }
-    
-    template <size_t N>
-    struct vec {
-        
-        template <typename T>
-        static _constexpr Vec<N, T> of(const std::array<T, N>& array) {
-            return Vec<N, T>(array);
-        }
-        
-    };
+
+    template <size_t N, typename T>
+    _constexpr T cosineSimilarity(const Vec<N, T>& a, const Vec<N, T>& b) noexcept {
+        return dot(a, b) / sqrt(a.norm2() * b.norm2());
+    }
     
 }
 
 #undef _op
 
 // @formatter:off
-enable_tuple(::math::Vec, size_t N COMMA typename T, N COMMA T)
+enable_tuple_templated(::math::Vec, size_t N COMMA typename T, N COMMA T)
 // @formatter:on

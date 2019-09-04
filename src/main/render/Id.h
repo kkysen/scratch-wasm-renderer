@@ -6,7 +6,7 @@
 
 #include "src/share/common/numbers.h"
 
-namespace scratch::render {
+namespace render {
     
     class Id {
     

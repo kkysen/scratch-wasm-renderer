@@ -56,9 +56,36 @@ namespace math {
     
     template <typename T>
     _constexpr T cross(const Vec<2, T>& a, const Vec<2, T>& b) noexcept {
-        return a[0] * b[1] - a[1] * b.x[0]; // z-component of zero-extended Vec3 cross product
+        return a[0] * b[1] - a[1] * b[0]; // z-component of zero-extended Vec3 cross product
+    }
+    
+    /**
+     * Computes twice the signed area of the triangle oab.
+     * If >0, then they're CCW.
+     * If <0, then they're CW.
+     * If =0, then they're collinear.
+     */
+    template <typename T>
+    _constexpr T signedArea(const Vec<2, T>& o, const Vec<2, T>& a, const Vec<2, T>& b) noexcept {
+        return math::cross(a - o, b - o);
+    }
+    
+    template <typename T>
+    _constexpr T ccw(const Vec<2, T>& o, const Vec<2, T>& a, const Vec<2, T>& b) noexcept {
+        const auto area = signedArea(o, a, b);
+        return area > 0 ? 1 : area < 0 ? -1 : 0;
+    }
+    
+    template <typename T>
+    _constexpr T isCcw(const Vec<2, T>& o, const Vec<2, T>& a, const Vec<2, T>& b) noexcept {
+        return signedArea(o, a, b) < 0;
+    }
+    
+    template <typename T>
+    _constexpr T isCw(const Vec<2, T>& o, const Vec<2, T>& a, const Vec<2, T>& b) noexcept {
+        return signedArea(o, a, b) > 0;
     }
     
 }
 
-enable_tuple(::math::Vec2, typename T, T)
+enable_tuple_templated(::math::Vec2, typename T, T)

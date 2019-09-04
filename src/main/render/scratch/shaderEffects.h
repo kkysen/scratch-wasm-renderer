@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include "utils.h"
+#include "types.h"
 #include <src/share/common/math/math.h>
 
 #include <array>
 #include <string>
 #include <functional>
 
-namespace scratch::render::shader::effects {
+namespace render::scratch::shader::effects {
     
     using array::Array;
     
@@ -59,7 +59,7 @@ namespace scratch::render::shader::effects {
 
 namespace {
     
-    using namespace scratch::render::shader::effects;
+    using namespace render::scratch::shader::effects;
     
     using math::modulus;
     using math::max;
@@ -69,7 +69,7 @@ namespace {
     using math::PI;
     using std::round;
     
-    static constexpr std::array<EffectType, 7> all = {
+    constexpr std::array<EffectType, 7> all = {
             EffectType {0, false, [](f32 x) -> f32 {
                 return modulus(x / 200, 1.f);
             }},
@@ -95,7 +95,7 @@ namespace {
     
 }
 
-namespace scratch::render::shader::effects {
+namespace render::scratch::shader::effects {
     
     constexpr const EffectType& color = ::all[0];
     constexpr const EffectType& fisheye = ::all[1];

@@ -26,6 +26,10 @@ files(share.common
         share/common/math/Mat4.cpp
         share/common/math/Rect.h
         share/common/math/Rect.cpp
+        share/common/math/NRect.h
+        share/common/math/NRect.cpp
+        share/common/math/interval.h
+        share/common/math/interval.cpp
         share/common/array/Array.h
         share/common/array/ArrayInterface.h
         share/common/array/Array.test.cpp
@@ -41,6 +45,8 @@ files(share.stde
         share/stde/c_str.cpp
         share/stde/by.h
         share/stde/by.cpp
+        share/stde/get_or_default.h
+        share/stde/get_or_default.cpp
         )
 
 files(share.lib

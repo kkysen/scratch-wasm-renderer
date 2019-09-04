@@ -2,7 +2,7 @@
 // Created by Khyber on 5/2/2019.
 //
 
-#include "utils.h"
+#include "src/main/render/scratch/types.h"
 
 constexpr i64 _random() {
     return 100;

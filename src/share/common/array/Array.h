@@ -250,7 +250,7 @@ namespace array {
         template <size_t M>
         _constexpr Array<T, N + M> operator+(const Array<T, M>& other) const noexcept {
             return range<N + M>().map([&a = *this, b = other](auto i) {
-                return i < N ? a[i] : b[i + N];
+                return i < N ? a[i] : b[i - N];
             });
         }
         
@@ -273,6 +273,19 @@ namespace array {
         _constexpr auto wrap(F f) const noexcept {
             return f(*this);
         }
+        
+        _constexpr size_t hash() const noexcept {
+            return 31 ^ map([](const auto& e) { return std::hash<T>(e); })
+                    .fold(std::bit_or());
+        }
+        
+        struct Hash {
+            
+            _constexpr size_t operator()(const Array& array) const noexcept {
+                return array.hash();
+            }
+        
+        };
         
     };
     
@@ -304,5 +317,5 @@ namespace array {
 }
 
 // @formatter:off
-enable_tuple(::array::Array, typename T COMMA size_t N, T COMMA N)
+enable_tuple_templated(::array::Array, typename T COMMA size_t N, T COMMA N)
 // @formatter:on

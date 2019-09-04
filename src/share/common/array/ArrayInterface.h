@@ -269,7 +269,7 @@ namespace std { // NOLINT(cert-dcl58-cpp)
  * Specialize std::tuple_size and std::tuple_element for a type
  * that has a dependent tuple_size and tuple_element type
  */
-#define enable_tuple(Tuple, TemplateDeclaration, TemplateVars) \
+#define enable_tuple_templated(Tuple, TemplateDeclaration, TemplateVars) \
 namespace std { \
     \
     template <TemplateDeclaration> \
@@ -277,5 +277,16 @@ namespace std { \
     \
     template <size_t __I, TemplateDeclaration> \
     struct tuple_element<__I, Tuple<TemplateVars>> : public Tuple<TemplateVars>::template tuple_element<__I> {}; \
+    \
+}
+
+#define enable_tuple(Tuple) \
+namespace std { \
+    \
+    template <> \
+    struct tuple_size<Tuple> : public Tuple::tuple_size {}; \
+    \
+    template <size_t I> \
+    struct tuple_element<I, Tuple> : public Tuple::template tuple_element<I> {}; \
     \
 }

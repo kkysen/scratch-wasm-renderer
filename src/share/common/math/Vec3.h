@@ -60,7 +60,7 @@ namespace math {
     };
     
     template <typename T>
-    _constexpr Vec3<T> cross(const Vec3<T>& a, const Vec3<T>& b) noexcept {
+    _constexpr Vec3<T> cross(const Vec<3, T>& a, const Vec<3, T>& b) noexcept {
         return Vec3(
                 a[1] * b[2] - a[2] * b[1],
                 a[2] * b[0] - a[0] * b[2],

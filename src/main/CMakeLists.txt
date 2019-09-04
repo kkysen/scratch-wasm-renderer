@@ -3,26 +3,42 @@ files(ScratchWasmRenderer
         main.cpp
         ScratchRenderer.h
         ScratchRenderer.cpp
-        render/ShaderManager.h
-        render/ShaderManager.cpp
-        render/utils.h
-        render/utils.cpp
-        render/Drawable.h
-        render/Drawable.cpp
+        render/scratch/ShaderManager.h
+        render/scratch/ShaderManager.cpp
+        render/scratch/types.h
+        render/scratch/types.cpp
+        render/scratch/Drawable.h
+        render/scratch/Drawable.cpp
         render/Color.h
         render/Color.cpp
         render/Id.h
         render/Id.cpp
-        render/Skin.h
-        render/Skin.cpp
-        render/effectTransform.h
-        render/effectTransform.cpp
-        render/IsTouching.h
-        render/IsTouching.cpp
-        render/Silhouette.h
-        render/Silhouette.cpp
-        render/shaderEffects.h
-        render/shaderEffects.cpp
+        render/scratch/Skin.h
+        render/scratch/Skin.cpp
+        render/scratch/effectTransform.h
+        render/scratch/effectTransform.cpp
+        render/scratch/IsTouching.h
+        render/scratch/IsTouching.cpp
+        render/scratch/Silhouette.h
+        render/scratch/Silhouette.cpp
+        render/scratch/shaderEffects.h
+        render/scratch/shaderEffects.cpp
+        render/scratch/BitmapSkin.h
+        render/scratch/BitmapSkin.cpp
+        render/ImageData.h
+        render/ImageData.cpp
+        render/scratch/Renderer.h
+        render/scratch/Renderer.cpp
+        render/scratch/color.h
+        render/scratch/color.cpp
+        render/types.h
+        render/hull/types.h
+        render/hull/hull.h
+        render/hull/hull.cpp
+        render/hull/convex.h
+        render/hull/convex.cpp
+        render/hull/grid.h
+        render/hull/grid.cpp
         render/ir.cpp
         twgl/Twgl.h
         twgl/Twgl.cpp

@@ -3,14 +3,17 @@
 //
 
 #include "Drawable.h"
-#include <iostream>
+//#include <iostream>
 
+// TODO remove, just for testing compilation
 int main() {
-    std::cout << "Hello" << std::endl;
-    using namespace scratch::render;
+//    std::cout << "Hello" << std::endl;
+    using namespace render::scratch;
     using namespace shader::effects;
+    using shader::effects::color;
     Drawable drawable(0);
-    std::cout << drawable.getEnabledEffects() << std::endl;
+    printf("%u\n", drawable.getEnabledEffects());
+//    std::cout << drawable.getEnabledEffects() << std::endl;
     drawable.updateDirection(5);
     drawable.updatePosition(Vec2(100, 200));
     drawable.updateScale(Vec2(90, 90));
@@ -19,7 +22,7 @@ int main() {
     drawable.updateEffects(effects);
     std::array<Vec2, 5> points = {Vec2(1, 2), Vec2(5, 4), Vec2(10, 24), Vec2(9, 3), Vec2(34, 43)};
     drawable.setConvexHullPoints(points);
-    std::cout << drawable.getEnabledEffects() << std::endl;
-    std::cout << drawable.getFastBounds().top << std::endl;
+//    std::cout << drawable.getEnabledEffects() << std::endl;
+//    std::cout << drawable.getFastBounds().top << std::endl;
     return static_cast<int>(drawable.getBounds().corners().matrix[0][0][0]);
 }

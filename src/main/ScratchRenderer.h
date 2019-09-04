@@ -6,7 +6,7 @@
 
 #include "src/share/common/numbers.h"
 #include "src/main/twgl/Twgl.h"
-#include "src/main/render/ShaderManager.h"
+#include "src/main/render/scratch/ShaderManager.h"
 #include "cheerp/client.h"
 #include "cheerp/clientlib.h"
 #include "cheerp/webgl.h"
