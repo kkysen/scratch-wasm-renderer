@@ -1,0 +1,44 @@
+Mat4::ortho should take a Rect<3>, a cube
+TODO make Rect N dimensional
+
+TODO check lambda captures to make sure no unnecessary copies
+
+use move iterators for inserting one vector into another usually
+
+TODO use arenas for vectors
+prob should profile them first to see how big they are
+
+TODO cube isn't really a cube, right?  just a 3D rectangle
+
+TODO put getConvexHullPointsForDrawable() in Skin or at least Drawable
+
+TODO for hull calculations, if # points is pretty small usually,
+using an llvm::SmallVector might be worth it
+
+TODO need a way to profile std::vector, esp. destruction
+
+
+from profiling a geometry dash game on scratch,
+I found that executing a block takes 40% of the total runtime,
+which is a fucking lot
+so compiling scratch will actually massively speed up games
+
+measuring time elapsed also takes a lot of time and is extremely unoptimized
+it calls a getter for a nowObj that has to choose the implementation,
+and then none of the timeElapsed calls are ever reused
+this could be easily fixed though
+performance.now() isn't even that accurate anymore
+
+TODO effectTransform functions only need Drawable::uniform, not whole Drawable
+
+there are a bunch of functions in scratch-render that are very slow,
+like transformPoint, transformColor, isTouchingColor, etc.
+they add up, so WASM will make a sizeable difference here
+
+it seems the computational rendering functions and the interpreter are the slowest parts
+
+TODO move render::scratch::effectTransform to render::scratch::shader::effect::transform
+and put function implementations in anonymous namespace
+
+TODO ? make constexpr math funcs like sin, cos
+in wasm, this will go through a JS Math.sin,cos call, which is slow
